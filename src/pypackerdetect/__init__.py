@@ -75,8 +75,8 @@ class PyPackerDetect:
                 #                the format "/[N]" where N is the offset in the string table ; in this case, we compute
                 #                the real section names and map them to the shortened ones to compare the relevant names
                 #                with the database of known section names
-                if re.match(r"^\/\d+$", n) and (_rn := _real_section_names(pe.path, logger=self.logger)):
-                    n = _rn[i]
+                if re.match(r"^\/\d+$", n) and (rsn := _real_section_names(pe.path, logger=self.logger)):
+                    n = rsn[i]
                 d['all'].append(n)
                 if ep >= s.VirtualAddress and ep <= (s.VirtualAddress + s.Misc_VirtualSize):
                     d['ep'].append(n)
