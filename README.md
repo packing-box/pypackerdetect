@@ -5,8 +5,8 @@
 [![PyPi](https://img.shields.io/pypi/v/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
 [![Build Status](https://github.com/packing-box/pypackerdetect/actions/workflows/python-package.yml/badge.svg)](https://github.com/packing-box/pypackerdetect/actions/workflows/python-package.yml)
-[![DOI](https://zenodo.org/badge/384872434.svg)](https://zenodo.org/badge/latestdoi/384872434)
-[![License](https://img.shields.io/pypi/l/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5732866.svg)](https://doi.org/10.5281/zenodo.5732866)
+[![License](https://img.shields.io/pypi/l/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect)
 
 
 A complete refactoring of [this project](https://github.com/cylance/PyPackerDetect) to a Python package with a console script to detect whether an executable is packed.
