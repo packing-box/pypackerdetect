@@ -7,13 +7,7 @@ from functools import lru_cache
 from pefile import PE
 
 
-__all__ = ["PyPackerDetect", "PACKERS", "SECTIONS"]
-
-
-with open(os.path.join(os.path.dirname(__file__), "db", "packers.json")) as f:
-    PACKERS = json.load(f)['packers']
-with open(os.path.join(os.path.dirname(__file__), "db", "sections.json")) as f:
-    SECTIONS = json.load(f)['sections']
+__all__ = ["PyPackerDetect"]
 
 
 @lru_cache
@@ -39,14 +33,26 @@ def _real_section_names(path, logger=None, timeout=10):
 
 
 class PyPackerDetect:
-    def __init__(self, peid=True, peid_large_db=False, peid_ep_only=True, bad_ep_sections=True, low_imports=True,
-                 packer_sections=True, unknown_sections=True, import_threshold=10, unknown_sections_threshold=3,
-                 bad_sections_threshold=2, logger=None, **kwargs):
+    def __init__(self, peid=True, peid_large_db=False, peid_ep_only=True, peid_db_path=None, bad_ep_sections=True,
+                 low_imports=True, packer_sections=True, unknown_sections=True, import_threshold=10,
+                 unknown_sections_threshold=3, bad_sections_threshold=2, logger=None, packers_json=None,
+                 sections_json=None, **kwargs):
         """ Configure the detector with various parameters. """
+        _p = lambda f: os.path.join(os.path.dirname(__file__), "db", f)
         self.__config = {
             'peid_large_db': peid_large_db, 'peid_ep_only': peid_ep_only, 'packer_sections': packer_sections,
             'peid': peid, 'bad_ep_sec': bad_ep_sections, 'low_imports': low_imports, 'unknown_sec': unknown_sections,
+            'peid_db_path': os.path.abspath(peid_db_path) if peid_db_path is not None else \
+                            _p("sigs_long.txt") if peid_large_db else _p("sigs_short.txt"),
+            'packers_json': os.path.abspath(packers_json) if packers_json is not None else _p("packers.json"),
+            'sections_json': os.path.abspath(sections_json) if sections_json is not None else _p("sections.json"),
         }
+        logger.debug(f"JSON with common packer section names: {self.__config['packers_json']}")
+        with open(self.__config['packers_json']) as f:
+            self.__config['packers_json'] = json.load(f)['packers']
+        logger.debug(f"JSON with known section names: {self.__config['sections_json']}")
+        with open(self.__config['sections_json']) as f:
+            self.__config['sections_json'] = json.load(f)['sections']
         self.__thresholds = {
             'bad_sections':     bad_sections_threshold,
             'imports':          import_threshold,
@@ -80,11 +86,11 @@ class PyPackerDetect:
                 d['all'].append(n)
                 if ep >= s.VirtualAddress and ep <= (s.VirtualAddress + s.Misc_VirtualSize):
                     d['ep'].append(n)
-                if n not in SECTIONS['known']:
+                if n not in self.__config['sections_json']['known']:
                     d['unknown'].append(n)
-                p = PACKERS.get(n)
+                p = self.__config['packers_json'].get(n)
                 # even if found in the packers database, ensure the related section name does not clash with a known one
-                if p is not None and n not in SECTIONS['known']:
+                if p is not None and n not in self.__config['sections_json']['known']:
                     d['packer'].append(n)
             except UnicodeDecodeError:
                 d['bad'].append(s.Name.decode('latin1').strip().rstrip("\0"))
@@ -101,18 +107,18 @@ class PyPackerDetect:
             else:
                 if l_ep > 1:
                     __add(0, "Entry point 0x%x falls in overlapping sections: '%s'" % (ep, ep_sec_list))
-                if not __intersect(SECTIONS['acceptable'], d['ep']):
+                if not __intersect(self.__config['sections_json']['acceptable'], d['ep']):
                     bad_ep_sec = False
-                    if __intersect(SECTIONS['delphi-bss'], d['all']):
+                    if __intersect(self.__config['sections_json']['delphi-bss'], d['all']):
                         # has bss, see if we have a delphi ep section
-                        bad_ep_sec = not __intersect(SECTIONS['delphi'], d['ep'])
-                    elif not __intersect(SECTIONS['acceptable'], d['all']):
+                        bad_ep_sec = not __intersect(self.__config['sections_json']['delphi'], d['ep'])
+                    elif not __intersect(self.__config['sections_json']['acceptable'], d['all']):
                         # normal entry section doesn't exist anywhere, so check for alternatives
-                        bad_ep_sec = not __intersect(SECTIONS['alternative'], d['ep'])
+                        bad_ep_sec = not __intersect(self.__config['sections_json']['alternative'], d['ep'])
                     else:
                         # not regular ep section, not a delphi entry section, not an alternative entry section, and
                         #  regular entry section name exists, so the only possibility left is a driver entry section
-                        bad_ep_sec = not __intersect(SECTIONS['driver'], d['ep'])
+                        bad_ep_sec = not __intersect(self.__config['sections_json']['driver'], d['ep'])
                     if bad_ep_sec:
                         __add(0, "Entry point 0x%x in irregular section(s): '%s'" % (ep, ep_sec_list))
         # low import count
@@ -139,12 +145,11 @@ class PyPackerDetect:
         # packer sections
         if self.__config['packer_sections']:
             for n in d['packer']:
-                __add(0, "Section name '%s' matches known packer: [%s]" % (n, PACKERS[n]))
+                __add(0, "Section name '%s' matches known packer: [%s]" % (n, self.__config['packers_json'][n]))
         # apply PEiD
         if self.__config['peid']:
-            db = os.path.join(os.path.dirname(__file__), "db", "sigs_long.txt") if self.__config['peid_large_db'] \
-                 else os.path.join(os.path.dirname(__file__), "db", "sigs_short.txt")
-            for m in peid.identify_packer(pe.path, db=db, ep_only=self.__config['peid_ep_only'], logger=self.logger):
+            for m in peid.identify_packer(pe.path, db=self.__config['peid_db_path'],
+                                          ep_only=self.__config['peid_ep_only'], logger=self.logger):
                 if len(m[1] or []) > 0:
                     __add(0, "Found PEID signature: %s" % ", ".join(m[1]))
         return r

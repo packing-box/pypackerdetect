@@ -40,21 +40,26 @@ def main():
         "pypackerdetect program.exe -b",
         "pypackerdetect program.exe --low-imports --unknown-sections",
         "pypackerdetect program.exe --imports-threshold 5 --bad-sections-threshold 5",
+        "pypackerdetect program.exe --peid-db-path user_db.txt --sections-json sections.json",
     ])
     parser = ArgumentParser(description=descr, epilog=examples, formatter_class=RawTextHelpFormatter, add_help=False)
     parser.add_argument("path", type=valid_file, help="path to the portable executable")
+    pths = parser.add_argument_group("path arguments")
+    pths.add_argument("--packers-json", metavar="JSON", help="path to the JSON with common packer section names "
+                                                             "(default: package-embedded JSON)")
+    pths.add_argument("--peid-db-path", metavar="TXT_DB",
+                      help="path to the PEiD database to be used (default: package-embedded DB)")
+    pths.add_argument("--sections-json", metavar="JSON", help="path to the JSON with known section names "
+                                                              "(default: package-embedded JSON)")
     opt = parser.add_argument_group("optional arguments")
     opt.add_argument("--bad-ep-sections", action="store_false",
                      help="check for bad entry point sections (default: True)")
-    opt.add_argument("--low-imports", action="store_false",
-                     help="check for the number of imports (default: True)")
-    opt.add_argument("--packer-sections", action="store_false",
-                     help="check for packer sections (default: True)")
+    opt.add_argument("--low-imports", action="store_false", help="check for the number of imports (default: True)")
+    opt.add_argument("--packer-sections", action="store_false", help="check for packer sections (default: True)")
     opt.add_argument("--peid", action="store_false", help="detect with PEiD (default: True)")
-    opt.add_argument("--peid-large-db", action="store_true", help="use the large database for PEiD (default: False)")
     opt.add_argument("--peid-ep-only", action="store_false", help="check only entry point signatures (default: True)")
-    opt.add_argument("--unknown-sections", action="store_false",
-                     help="check for unknown sections (default: True)")
+    opt.add_argument("--peid-large-db", action="store_true", help="use the large database for PEiD (default: False)")
+    opt.add_argument("--unknown-sections", action="store_false", help="check for unknown sections (default: True)")
     thrs = parser.add_argument_group("threshold arguments")
     thrs.add_argument("--bad-sections-threshold", dest="bst", type=PositiveInt, default=2,
                       help="threshold for the number of bad sections (default: 2)")
