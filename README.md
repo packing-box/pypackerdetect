@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/packing-box/PyPackerDetect/raw/main/docs/logo.png"></p>
+<p align="center"><img src="https://github.com/packing-box/PyPackerDetect/raw/main/docs/pages/img/logo.png"></p>
 <h1 align="center">PyPackerDetect <a href="https://twitter.com/intent/tweet?text=PyPackerDetect%20-%20Packer%20detector%20using%20multiple%20heuristics%20and%20PEiD's%20signatures%20database.%0D%0Ahttps%3a%2f%2fgithub%2ecom%2fpacking-box%2fPyPackerDetect%0D%0A&hashtags=python,pe,peid,packer,packingdetection"><img src="https://img.shields.io/badge/Tweet--lightgrey?logo=twitter&style=social" alt="Tweet" height="20"/></a></h1>
 <h3 align="center">Detect packers on PE files using heuristics and signatures.</h3>
 
@@ -23,8 +23,9 @@ $ pypackerdetect --help
 usage examples:
 - pypackerdetect program.exe
 - pypackerdetect program.exe -b
-- pypackerdetect program.exe --low-imports --unknown-sections
+- pypackerdetect program.exe --low-imports --unknown-sections   # disable these two checks
 - pypackerdetect program.exe --imports-threshold 5 --bad-sections-threshold 5
+- pypackerdetect program.exe --peid-db-path user_db.txt --sections-json sections.json
 ```
 
 ## :bulb: Detection Mechanisms
@@ -32,7 +33,7 @@ usage examples:
 - PEID signatures
 - Known packer section names
 - Entrypoint in non-standard section
-- Threshhold of non-standard sections reached
+- Threshold of non-standard sections reached
 - Low number of imports
 - Overlapping entrypoint sections
 
