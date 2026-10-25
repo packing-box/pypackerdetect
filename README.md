@@ -4,6 +4,7 @@
 
 [![PyPi](https://img.shields.io/pypi/v/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
+[![Read The Docs](https://readthedocs.org/projects/pypackerdetect/badge/?version=latest)](https://pypackerdetect.readthedocs.io/en/latest/?badge=latest)
 [![Build Status](https://github.com/packing-box/pypackerdetect/actions/workflows/python-package.yml/badge.svg)](https://github.com/packing-box/pypackerdetect/actions/workflows/python-package.yml)
 [![Security](https://github.com/packing-box/pypackerdetect/actions/workflows/security.yml/badge.svg)](https://github.com/packing-box/pypackerdetect/actions/workflows/security.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5732866.svg)](https://doi.org/10.5281/zenodo.5732866)
@@ -52,11 +53,5 @@ You may also like these:
 - [PEiD](https://github.com/packing-box/peid): Python implementation of the well-known Packed Executable iDentifier ([PEiD](https://www.aldeid.com/wiki/PEiD)).
 - [REMINDer](https://github.com/packing-box/reminder): Packing detector using a simple heuristic (inspired from [this paper](https://ieeexplore.ieee.org/document/5404211)).
 
-
-## :clap:  Supporters
-
-[![Stargazers repo roster for @packing-box/PyPackerDetect](https://reporoster.com/stars/dark/packing-box/PyPackerDetect)](https://github.com/packing-box/PyPackerDetect/stargazers)
-
-[![Forkers repo roster for @packing-box/PyPackerDetect](https://reporoster.com/forks/dark/packing-box/PyPackerDetect)](https://github.com/packing-box/PyPackerDetect/network/members)
 
 <p align="center"><a href="#"><img src="https://img.shields.io/badge/Back%20to%20top--lightgrey?style=social" alt="Back to top" height="20"/></a></p>
