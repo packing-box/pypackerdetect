@@ -5,6 +5,7 @@
 [![PyPi](https://img.shields.io/pypi/v/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
 [![Build Status](https://github.com/packing-box/pypackerdetect/actions/workflows/python-package.yml/badge.svg)](https://github.com/packing-box/pypackerdetect/actions/workflows/python-package.yml)
+[![Security](https://github.com/packing-box/pypackerdetect/actions/workflows/security.yml/badge.svg)](https://github.com/packing-box/pypackerdetect/actions/workflows/security.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5732866.svg)](https://doi.org/10.5281/zenodo.5732866)
 [![License](https://img.shields.io/pypi/l/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect)
 

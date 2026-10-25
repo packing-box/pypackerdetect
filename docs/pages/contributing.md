@@ -12,6 +12,18 @@ and include:
 - the exact command and its output, ideally with `-v`;
 - if possible, a link to (or the hash of) the sample.
 
+## Security
+
+Please do **not** report vulnerabilities in public issues. See the
+[security policy](https://github.com/packing-box/pypackerdetect/blob/main/SECURITY.md):
+report them privately through the repository's *Security* tab
+(*Report a vulnerability*).
+
+Dependencies are monitored by Dependabot and audited with
+[pip-audit](https://github.com/pypa/pip-audit) by the `security` workflow
+(`.github/workflows/security.yml`), on every push and pull request to `main`
+and weekly.
+
 ## Adding section names
 
 - **Packer section names** go in `src/pypackerdetect/db/packers.json`, with a
@@ -41,8 +53,9 @@ CI (`.github/workflows/python-package.yml`) installs the package on Python
 
 ## Releasing
 
-The version is stored in `src/pypackerdetect/VERSION.txt`. When a push to
-`main` changes that file, CI builds the package and publishes it to PyPI.
+The version is stored in `src/pypackerdetect/VERSION.txt`. On each push to
+`main`, CI checks whether that version is already on PyPI. If it is not, CI
+builds the package and publishes it.
 
 ## Building this documentation
 
